@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebhookWaves</title>
+    <title>WebhookWaves - 2.0</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,6 +16,7 @@
             overflow: hidden;
             background-color: #4f74a3;
             transition: background-color 3s ease-in-out;
+            position: relative;
         }
 
         .container {
@@ -25,7 +26,6 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
         }
 
         h1 {
@@ -55,7 +55,6 @@
 
         button {
             padding: 10px 20px;
-            margin-top: 10px;
             border: none;
             border-radius: 5px;
             background-color: #007bff;
@@ -63,6 +62,8 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin: 0 auto; /* Zentriert den Button */
+            display: block; /* Macht den Button zu einem Blockelement */
         }
 
         button:hover {
@@ -111,11 +112,29 @@
                 transform: translateY(-50px) scale(1.2);
             }
         }
+
+        /* Stil für das Menü */
+        .menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu button {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
+    <div class="menu">
+        <button id="toggleBubblesButton">Toggle Bubbles</button>
+        <button id="spawnBubbleButton">Spawn Bubble</button>
+    </div>
+
     <div class="container">
-        <h1>WebhookWaves 2</h1>
+        <h1>WebhookWaves - 2.0</h1>
         <form id="discordForm">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -140,35 +159,32 @@
     <audio id="popSound" src="Pop.mp3"></audio>
 
     <script>
-        setInterval(changeBackgroundColor, 3000);
-        setInterval(createBubble, 2000);
+        var bubbleInterval;
 
-        function changeBackgroundColor() {
-            const colors = ["#4f74a3", "#6c5b7b", "#424874", "#8e9aaf"];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.body.style.backgroundColor = randomColor;
-        }
-
+        // Funktion zum Erstellen einer Blase
         function createBubble() {
             const bubble = document.createElement("div");
             bubble.classList.add("bubble");
-            bubble.style.left = Math.random() * window.innerWidth + "px";
-            bubble.style.top = Math.random() * window.innerHeight + "px";
+            bubble.style.left = Math.random() * (window.innerWidth - 30) + "px";
+            bubble.style.top = Math.random() * (window.innerHeight - 30) + "px";
             bubble.style.backgroundColor = getRandomBubbleColor();
             bubble.addEventListener("click", popBubble);
             document.body.appendChild(bubble);
         }
 
+        // Funktion zum Entfernen einer Blase
         function popBubble(event) {
             document.getElementById("popSound").play();
             event.target.remove();
         }
 
+        // Funktion zum Zufälligen Auswählen einer Blasenfarbe
         function getRandomBubbleColor() {
             const colors = ["#ff6666", "#66ff66", "#6666ff", "#ffff66", "#66ffff", "#ff66ff"];
             return colors[Math.floor(Math.random() * colors.length)];
         }
 
+        // Event Listener für das Formular zum Absenden von Nachrichten
         document.getElementById("discordForm").addEventListener("submit", function(event) {
             event.preventDefault();
 
@@ -205,6 +221,19 @@
                 alert("There was a problem sending the message.");
             });
         });
+
+        // Event Listener für das Button zum Ein-/Ausschalten der Blasen
+        document.getElementById("toggleBubblesButton").addEventListener("click", function() {
+            if (bubbleInterval) {
+                clearInterval(bubbleInterval);
+                bubbleInterval = null;
+            } else {
+                bubbleInterval = setInterval(createBubble, 2000);
+            }
+        });
+
+        // Event Listener für das Button zum manuellen Erstellen einer Blase
+        document.getElementById("spawnBubbleButton").addEventListener("click", createBubble);
     </script>
 </body>
 </html>
