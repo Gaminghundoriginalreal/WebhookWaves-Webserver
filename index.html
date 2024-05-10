@@ -46,17 +46,17 @@
             font-size: 16px;
         }
 
-        button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+button {
+    padding: 8px 15px; /* Kleinerer padding */
+    margin-top: 10px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px; /* Kleinere Schriftgröße */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
         button:hover {
             background-color: #0056b3;
@@ -103,6 +103,7 @@
                 <span class="discord-icon">&#128233;</span>
                 Send Message
             </button>
+            <button type="button" onclick="window.location.href='v2.html'">Use v2 Beta</button>
             <div class="notification" id="notification">Message sent successfully!</div>
         </form>
     </div>
