@@ -74,6 +74,16 @@
             color: #fff;
             font-size: 20px;
         }
+
+        .notification {
+            text-align: center;
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: white;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -93,6 +103,7 @@
                 <span class="discord-icon">&#128233;</span>
                 Send Message
             </button>
+            <div class="notification" id="notification">Message sent successfully!</div>
         </form>
     </div>
 
@@ -118,7 +129,10 @@
             })
             .then(response => {
                 if (response.ok) {
-                    alert("Message sent successfully!");
+                    document.getElementById("notification").style.display = "block";
+                    setTimeout(function() {
+                        document.getElementById("notification").style.display = "none";
+                    }, 3000); // Hide notification after 3 seconds
                 } else {
                     alert("There was a problem sending the message.");
                 }
