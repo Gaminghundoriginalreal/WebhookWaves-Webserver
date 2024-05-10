@@ -7,53 +7,15 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #4f74a3;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            position: relative;
-        }
-
-        .background-circles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             overflow: hidden;
-            pointer-events: none; /* Hinzugefügtes Attribut */
-        }
-
-        .circle {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            animation: animate 25s linear infinite;
-            transition: transform 0.3s ease-in-out;
-            pointer-events: none; /* Hinzugefügtes Attribut */
-        }
-
-        .circle:nth-child(1) {
-            top: -100px;
-            left: -100px;
-            animation-delay: 0s;
-        }
-
-        .circle:nth-child(2) {
-            top: 200px;
-            left: -100px;
-            animation-delay: 2s;
-        }
-
-        .circle:nth-child(3) {
-            top: -150px;
-            left: 400px;
-            animation-delay: 1s;
+            background-color: #4f74a3;
+            transition: background-color 5s ease-in-out;
         }
 
         .container {
@@ -63,6 +25,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         h1 {
@@ -129,36 +92,29 @@
             display: none;
         }
 
-        @keyframes animate {
-            0% {
-                transform: scale(0) translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: scale(1.2) translateY(50px) rotate(180deg);
-            }
-            100% {
-                transform: scale(0) translateY(0) rotate(360deg);
-            }
+        .bubble {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
-    <div class="background-circles">
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-    </div>
     <div class="container">
         <h1>WebhookWaves 2</h1>
-        <form id="discordForm" enctype="multipart/form-data">
+        <form id="discordForm">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
 
             <label for="message">Message:</label>
             <textarea id="message" name="message" rows="4" cols="50" required></textarea>
 
-            <label for="avatar">Avatar:</label>
-            <input type="file" id="avatar" name="avatar" accept="image/*" required>
+            <label for="avatar">Avatar URL:</label>
+            <input type="text" id="avatar" name="avatar" required>
 
             <label for="webhook">Webhook URL:</label>
             <input type="text" id="webhook" name="webhook" required>
@@ -172,22 +128,48 @@
     </div>
 
     <script>
+        setInterval(changeBackgroundColor, 5000);
+        setInterval(createBubble, 5000);
+
+        function changeBackgroundColor() {
+            const colors = ["#4f74a3", "#6c5b7b", "#424874", "#8e9aaf"];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundColor = randomColor;
+        }
+
+        function createBubble() {
+            const bubble = document.createElement("div");
+            bubble.classList.add("bubble");
+            bubble.style.left = Math.random() * window.innerWidth + "px";
+            bubble.style.top = Math.random() * window.innerHeight + "px";
+            bubble.addEventListener("click", popBubble);
+            document.body.appendChild(bubble);
+        }
+
+        function popBubble(event) {
+            event.target.remove();
+        }
+
         document.getElementById("discordForm").addEventListener("submit", function(event) {
             event.preventDefault();
 
             var username = document.getElementById("username").value;
             var message = document.getElementById("message").value;
-            var avatar = document.getElementById("avatar").files[0];
+            var avatarUrl = document.getElementById("avatar").value;
             var webhookUrl = document.getElementById("webhook").value;
 
-            var formData = new FormData();
-            formData.append("username", username);
-            formData.append("content", message);
-            formData.append("avatar", avatar);
+            var data = {
+                "username": username,
+                "content": message,
+                "avatar_url": avatarUrl
+            };
 
             fetch(webhookUrl, {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             })
             .then(response => {
                 if (response.ok) {
