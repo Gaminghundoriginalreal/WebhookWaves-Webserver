@@ -15,7 +15,7 @@
             height: 100vh;
             overflow: hidden;
             background-color: #4f74a3;
-            transition: background-color 5s ease-in-out;
+            transition: background-color 3s ease-in-out;
         }
 
         .container {
@@ -100,6 +100,16 @@
             background-color: rgba(255, 255, 255, 0.5);
             cursor: pointer;
             z-index: 1;
+            animation: bubbleAnimation 5s ease-in-out infinite;
+        }
+
+        @keyframes bubbleAnimation {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-50px) scale(1.2);
+            }
         }
     </style>
 </head>
@@ -127,9 +137,11 @@
         </form>
     </div>
 
+    <audio id="popSound" src="Pop.mp3"></audio>
+
     <script>
-        setInterval(changeBackgroundColor, 5000);
-        setInterval(createBubble, 5000);
+        setInterval(changeBackgroundColor, 3000);
+        setInterval(createBubble, 2000);
 
         function changeBackgroundColor() {
             const colors = ["#4f74a3", "#6c5b7b", "#424874", "#8e9aaf"];
@@ -142,12 +154,19 @@
             bubble.classList.add("bubble");
             bubble.style.left = Math.random() * window.innerWidth + "px";
             bubble.style.top = Math.random() * window.innerHeight + "px";
+            bubble.style.backgroundColor = getRandomBubbleColor();
             bubble.addEventListener("click", popBubble);
             document.body.appendChild(bubble);
         }
 
         function popBubble(event) {
+            document.getElementById("popSound").play();
             event.target.remove();
+        }
+
+        function getRandomBubbleColor() {
+            const colors = ["#ff6666", "#66ff66", "#6666ff", "#ffff66", "#66ffff", "#ff66ff"];
+            return colors[Math.floor(Math.random() * colors.length)];
         }
 
         document.getElementById("discordForm").addEventListener("submit", function(event) {
