@@ -234,17 +234,25 @@
             });
         });
 
-        // Event Listener für das Button zum Ein-/Ausschalten der Blasen
-        document.getElementById("toggleBubblesButton").addEventListener("click", function() {
-            if (bubbleInterval) {
-                clearInterval(bubbleInterval);
-                bubbleInterval = null;
-            } else {
-                bubbleInterval = setInterval(createBubble, 2000);
-            }
+document.getElementById("toggleBubblesButton").addEventListener("click", function() {
+    var bubbleContainer = document.querySelectorAll(".bubble");
+    var spawnButton = document.getElementById("spawnBubbleButton");
+    if (bubbleInterval) {
+        clearInterval(bubbleInterval);
+        bubbleInterval = null;
+        bubbleContainer.forEach(function(bubble) {
+            bubble.style.display = "none"; 
         });
+        spawnButton.style.display = "none"; 
+    } else {
+        bubbleInterval = setInterval(createBubble, 2000);
+        bubbleContainer.forEach(function(bubble) {
+            bubble.style.display = "block"; 
+        });
+        spawnButton.style.display = "block"; 
+    }
+});
 
-        // Event Listener für das Button zum manuellen Erstellen einer Blase
         document.getElementById("spawnBubbleButton").addEventListener("click", createBubble);
     </script>
 
