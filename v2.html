@@ -26,6 +26,8 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2; /* Stellt das Menü über die Blasen */
         }
 
         h1 {
@@ -116,14 +118,24 @@
         /* Stil für das Menü */
         .menu {
             position: absolute;
-            top: 20px;
+            bottom: 20px;
             left: 20px;
             display: flex;
             flex-direction: column;
+            z-index: 2; /* Stellt das Menü über die Blasen */
         }
 
         .menu button {
             margin-bottom: 10px;
+        }
+
+        /* Stil für das Copyright */
+        .copyright {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #888;
         }
     </style>
 </head>
@@ -235,5 +247,9 @@
         // Event Listener für das Button zum manuellen Erstellen einer Blase
         document.getElementById("spawnBubbleButton").addEventListener("click", createBubble);
     </script>
+
+    <div class="copyright">
+        &copy; Copyright WebhookWaves 2024
+    </div>
 </body>
 </html>
