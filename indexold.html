@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebhookWaves</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+button {
+    padding: 8px 15px; /* Kleinerer padding */
+    margin-top: 10px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px; /* Kleinere Schriftgröße */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .discord-icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #7289da;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .notification {
+            text-align: center;
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: white;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WebhookWaves - 1.0</h1>
+        <form id="discordForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="4" cols="50" required></textarea>
+
+            <label for="webhook">Webhook URL:</label>
+            <input type="text" id="webhook" name="webhook" required>
+
+            <button type="submit">
+                <span class="discord-icon">&#128233;</span>
+                Send Message
+            </button>
+            <button type="button" onclick="window.location.href='v2.html'">Use v2 Beta</button>
+            <div class="notification" id="notification">Message sent successfully!</div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("discordForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var username = document.getElementById("username").value;
+            var message = document.getElementById("message").value;
+            var webhookUrl = document.getElementById("webhook").value;
+
+            var data = {
+                "username": username,
+                "content": message
+            };
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById("notification").style.display = "block";
+                    setTimeout(function() {
+                        document.getElementById("notification").style.display = "none";
+                    }, 3000); // Hide notification after 3 seconds
+                } else {
+                    alert("There was a problem sending the message.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("There was a problem sending the message.");
+            });
+        });
+    </script>
+</body>
+</html>
